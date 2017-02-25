@@ -2,13 +2,13 @@ package ru.mirea.labs.trpo.lab1
 
 import java.util.stream.Collectors
 
-public class Part1 {
+class Part1 {
     final static int MAX_ARRAY_SIZE = 100
     final static int MAX_ARRAY_ELEMENT_MOD = 1000
     final static int MAX_K_MOD = 100
 
     static void main(String[] args) {
-        println "Выберите метод задания массив (m - manual, r - random): "
+        println "Выберите метод задания массива (m - manual, r - random): "
         def scanner = new Scanner(System.in)
         def mode = scanner.nextLine()
         if (mode == null || (mode != 'm' && mode != 'r'))
@@ -51,7 +51,7 @@ public class Part1 {
         [array, k]
     }
 
-    public static List moveArray(List array, int k) {
+    static List moveArray(List array, int k) {
         println "Исходный массив: $array, k : $k"
         if (Math.abs(k) > array.size()) {
             println "K=$k > arraySize=${array.size()}"
