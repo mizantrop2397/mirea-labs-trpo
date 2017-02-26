@@ -63,7 +63,7 @@ class Part2 {
     static Map<String, Integer> findMostFrequentWords(Map<String, Integer> allWords, int k) {
         if (k > allWords.size())
             writeWrongInputAndExit()
-        def words = allWords.toSorted { a, b -> b.value - a.value }.take(k)
+        def words = (allWords as MapWithCustomRaddixSort).sortFirst k
         println "Наиболее частые слова: $words"
         words
     }
@@ -72,6 +72,46 @@ class Part2 {
         println "Неверный ввод"
         System.exit(-1)
     }
+}
 
+trait MapWithCustomRaddixSort {
+    def sortFirst(int firstElementsCount) {
+        def resultMap = []
+        def entrySet = entrySet()
+        int maxValue = entrySet[0].value
+        int minValue = entrySet[0].value
 
+        for (int i = 1; i < entrySet.size(); i++) {
+            if (entrySet[i].value > maxValue)
+                maxValue = entrySet[i].value
+
+            if (entrySet[i].value < minValue)
+                minValue = entrySet[i].value
+        }
+
+        def bucket = []
+
+        for (int i = 0; i < maxValue - minValue + 1; i++) {
+            bucket[i] = []
+        }
+
+        for (int i = 0; i < entrySet.size(); i++) {
+            bucket[entrySet[i].value - minValue] << entrySet[i]
+        }
+
+        int position = 0
+        for (int i = bucket.size() - 1; i >= 0; i--) {
+            if (position == firstElementsCount)
+                break
+            if (bucket[i].size() > 0) {
+                for (int j = 0; j < bucket[i].size(); j++) {
+                    if (position == firstElementsCount)
+                        break
+                    resultMap[position] = bucket[i][j]
+                    position++
+                }
+            }
+        }
+        resultMap.collectEntries { [(it.key): it.value] }
+    }
 }
