@@ -3,7 +3,7 @@ package ru.mirea.labs.trpo.lab1
 import java.util.stream.Collectors
 
 class Part2 {
-    final static Long MAX_ARRAY_SIZE = 1_000_000
+    final static Integer MAX_ARRAY_SIZE = 1_000_000
     final static Long MAX_ARRAY_ELEMENT = 1_000_000_000
 
     static void main(String[] args) {
@@ -29,30 +29,20 @@ class Part2 {
         if (arrayOfStrings == null || arrayOfStrings.empty)
             writeWrongInputAndExit()
         def array = arrayOfStrings.stream().map(this.&convertStringToLongChecked).peek(this.&checkArrayElement).collect Collectors.toList()
-        checkArraySize array
         if (array == null || array.empty)
             writeWrongInputAndExit()
-        array
+        array.toArray() as Long[]
     }
 
-    private static randomInput() {
-        new Random().longs(MAX_ARRAY_SIZE - 1, 1, MAX_ARRAY_ELEMENT).toArray() as List
+    private static Long[] randomInput() {
+        def halfOfArray = new Random().longs((MAX_ARRAY_SIZE / 2) - 1 as Integer, 14, MAX_ARRAY_ELEMENT).toArray() as List
+        (halfOfArray + halfOfArray) << 13L
     }
 
-    public static Long findAloneElement(List<Long> array) {
+    public static Long findAloneElement(Long[] array) {
+        checkArraySize array
         println "Исходный массив: $array"
-        for (int i = 0; i < array.size(); i++) {
-            if (array[i] == null)
-                continue
-            for (int j = 0; j < array.size(); j++) {
-                if (array[i] == array[j]) {
-                    array.remove j
-                    array.remove i
-                    break
-                }
-            }
-        }
-        def k = array.find { it != null }
+        def k = Arrays.stream(array).reduce { a, b -> a ^ b }.orElseThrow { new RuntimeException("Ошибка вычисления") }
         println "Одинокий элемент: $k"
         k
     }
@@ -75,9 +65,9 @@ class Part2 {
         }
     }
 
-    private static checkArraySize(List array) {
-        def size = array.size()
-        if (size > MAX_ARRAY_SIZE || array.empty || size % 2 == 0) {
+    private static checkArraySize(Long[] array) {
+        def size = array.length
+        if (size > MAX_ARRAY_SIZE || array.length == 0 || size % 2 == 0) {
             println "Некорректная длина массива: $size"
             System.exit(-1)
         }
