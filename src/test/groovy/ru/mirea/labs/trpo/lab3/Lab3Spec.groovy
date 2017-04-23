@@ -56,37 +56,37 @@ class Lab3Spec extends Specification {
                 elementsCount[i][j] = 0
             }
         }
-        def perms = []
+        def permutations = []
         t.times {
-            def generatedPerms = []
+            def generatedPermutations = []
             m.times {
-                generatedPerms << Lab3.generateRandomPermutation(n)
+                generatedPermutations << Lab3.generateRandomPermutation(n)
             }
-            def generatedPerm = generatedPerms[Lab3.uniform(m)]
-            for (int i = 0; i < elementsCount.size(); i++) {
-                for (int j = 0; j < elementsCount[i].size(); j++) {
-                    if (j == generatedPerm[i])
+            def generatedPermutation = generatedPermutations[Lab3.uniform(m)]
+            for (int i = 0; i < elementsCount.length; i++) {
+                for (int j = 0; j < elementsCount[i].length; j++) {
+                    if (j == generatedPermutation[i])
                         elementsCount[i][j]++
                 }
             }
 
-            perms << generatedPerm
+            permutations << generatedPermutation
         }
 
         then:
-        perms.each {
+        permutations.each {
             Lab3.isPermutation(it as Long[])
         }
         println "Полученная статистика: "
         print "   "
         for (int i = 1; i <= n; i++) {
-            print "$i | "
+            printf "%10d", i
         }
         println()
         for (int i = 0; i < elementsCount.length; i++) {
-            print "$i: "
+            print "[$i]:"
             for (int j = 1; j < elementsCount[i].length; j++) {
-                print "${elementsCount[i][j]} | "
+                printf "%10d", elementsCount[i][j]
             }
             println()
         }
@@ -95,5 +95,6 @@ class Lab3Spec extends Specification {
         n   | m   | t
         10  | 100 | 100
         100 | 100 | 100
+        500 | 10  | 10
     }
 }
