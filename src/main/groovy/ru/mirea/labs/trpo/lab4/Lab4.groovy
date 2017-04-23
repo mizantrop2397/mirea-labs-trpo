@@ -14,10 +14,14 @@ class Lab4 {
 
     static String findPattern(List<String> strings) {
         println "Исходный текст: ${strings}"
-        def pattern = strings
-                .findAll { it.empty }
-                .sum { a, b -> a ^ b }
-        println "Повторяемая строка: $pattern "
+        if (strings.empty) return ""
+        strings = strings.findAll { !it.empty }
+        def pattern = strings[0].toSet().join("")
+        if (strings.size() == 1) return pattern
+        for (def strIndex = 1; strIndex < strings.size(); strIndex++) {
+            pattern = strings[strIndex].findAll(/[$pattern]/).join("")
+        }
+        println "Повторяемая строка: '${pattern ?: ""}'"
         pattern
     }
 
