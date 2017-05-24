@@ -16,13 +16,13 @@ class Lab4 {
         println "Исходный текст: ${strings}"
         if (strings.empty) return ""
         strings = strings.findAll { !it.empty }
-        def pattern = strings[0].toSet().join("")
+        def pattern = strings[0].toSet()
         if (strings.size() == 1) return pattern
-        for (def strIndex = 1; strIndex < strings.size(); strIndex++) {
-            pattern = strings[strIndex].findAll(/[$pattern]/).join("")
-        }
-        println "Повторяемая строка: '${pattern ?: ""}'"
-        pattern
+        def result = strings.stream().skip(1).reduce pattern, { accumulator, value -> value.findAll(/[$accumulator]/).join("") }
+        println "Повторяемая строка: '${result ?: ""}'"
+        result
+
+        //Переписать на множества
     }
 
     private static writeWrongInputAndExit() {

@@ -48,20 +48,20 @@ class Lab3Spec extends Specification {
     "Should generate m: '#m' random permutations of length: '#n' t: '#t' times"() {
         when:
         def elementsCount = 1..n as Integer[][]
-        for (int i = 0; i < elementsCount.length; i++) {
-            elementsCount[i] = 0..n
+        for (int i = 0; i < n; i++) {
+            elementsCount[i] = 0..n - 1
         }
-        for (int i = 0; i < elementsCount.length; i++) {
-            for (int j = 0; j < elementsCount[i].size(); j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 elementsCount[i][j] = 0
             }
         }
         def permutations = []
-        t.times {
-            def generatedPermutations = []
-            m.times {
-                generatedPermutations << Lab3.generateRandomPermutation(n)
-            }
+        def generatedPermutations = []
+        m.times {
+            generatedPermutations << Lab3.generateRandomPermutation(n)
+        }
+        m.times {
             def generatedPermutation = generatedPermutations[Lab3.uniform(m)]
             for (int i = 0; i < elementsCount.length; i++) {
                 for (int j = 0; j < elementsCount[i].length; j++) {
@@ -69,7 +69,6 @@ class Lab3Spec extends Specification {
                         elementsCount[i][j]++
                 }
             }
-
             permutations << generatedPermutation
         }
 
@@ -92,9 +91,8 @@ class Lab3Spec extends Specification {
         }
 
         where:
-        n   | m   | t
-        10  | 100 | 100
-        100 | 100 | 100
-        500 | 10  | 10
+        n  | m
+        10 | 10000
     }
+
 }

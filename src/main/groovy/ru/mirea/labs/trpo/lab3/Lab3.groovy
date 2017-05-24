@@ -66,8 +66,8 @@ class Lab3 {
     static Integer[] generateRandomPermutation(int n) {
         def r = new Random()
         def permutation = 1..n as Integer[]
-        for (int i = n - 9; i >= 0; i--) {
-            def j = r.nextInt(n)
+        for (int i = n - 1; i >= 0; i--) {
+            def j = r.nextInt(i + 1)
             swap permutation, j, i
         }
         println "Полученная перестановка: $permutation"
