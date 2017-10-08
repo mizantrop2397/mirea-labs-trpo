@@ -1,4 +1,4 @@
-package ru.mirea.labs.trpo.lab5
+package ru.mirea.labs.trpo.sem1.lab5
 
 class Matcher {
     private static DATE_REGEX = /[0-9]{4}\/(0[1-9]|1[012])\/(0[1-9]|1[0-9]|2[0-9]|3[01])/

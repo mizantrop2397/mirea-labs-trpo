@@ -1,4 +1,4 @@
-package ru.mirea.labs.trpo.lab2
+package ru.mirea.labs.trpo.sem1.lab2
 
 import spock.lang.Specification
 import spock.lang.Unroll

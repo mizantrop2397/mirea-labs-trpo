@@ -1,6 +1,6 @@
-package ru.mirea.labs.trpo.lab5
+package ru.mirea.labs.trpo.sem1.lab5
 
-import static ru.mirea.labs.trpo.lab5.Matcher.match
+import static ru.mirea.labs.trpo.sem1.lab5.Matcher.match
 
 class Lab5 {
     private static TEST_STRINGS =

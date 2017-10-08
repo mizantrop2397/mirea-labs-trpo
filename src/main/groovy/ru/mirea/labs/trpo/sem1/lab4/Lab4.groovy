@@ -1,4 +1,4 @@
-package ru.mirea.labs.trpo.lab4
+package ru.mirea.labs.trpo.sem1.lab4
 
 class Lab4 {
     final static String FILE_PATH = "lab4/text.txt"

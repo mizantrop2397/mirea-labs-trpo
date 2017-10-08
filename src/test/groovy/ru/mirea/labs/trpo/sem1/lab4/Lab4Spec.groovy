@@ -1,4 +1,4 @@
-package ru.mirea.labs.trpo.lab4
+package ru.mirea.labs.trpo.sem1.lab4
 
 import spock.lang.Specification
 

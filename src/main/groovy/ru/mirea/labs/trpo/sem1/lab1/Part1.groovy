@@ -1,4 +1,4 @@
-package ru.mirea.labs.trpo.lab1
+package ru.mirea.labs.trpo.sem1.lab1
 
 import java.util.stream.Collectors
 
