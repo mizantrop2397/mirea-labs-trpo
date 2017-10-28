@@ -1,0 +1,2 @@
+time level doors
+1 1 OPEN
