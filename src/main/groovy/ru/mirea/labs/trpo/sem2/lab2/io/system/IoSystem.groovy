@@ -22,7 +22,7 @@ class IoSystem {
 
     static void write(List<OutputInfo> output) {
         File outputFile = ["$PATH/output.txt"]
-        outputFile << "time level doors\n"
+        outputFile.withWriter { it << "time level doors\n" }
         output.each { outputFile << "${it.time} ${it.level} ${it.doorsState}\n" }
     }
 }
