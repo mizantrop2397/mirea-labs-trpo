@@ -23,7 +23,7 @@ class ElevatorController {
     }
 
     private void initializeElevatorCore(Queue<InputInfo> input, List<OutputInfo> output) {
-        int timeCounter = input.first().time
+        int timeCounter = input.peek().time
         ElevatorMovementNotifier elevatorMovementNotifier = new ElevatorMovementNotifier() {
             @Override
             void doorsOpen(int level) {
