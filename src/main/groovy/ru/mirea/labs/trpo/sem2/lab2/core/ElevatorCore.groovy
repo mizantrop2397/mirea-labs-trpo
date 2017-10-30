@@ -1,15 +1,15 @@
 package ru.mirea.labs.trpo.sem2.lab2.core
 
-import ru.mirea.labs.trpo.sem2.lab2.constant.Directional
+import ru.mirea.labs.trpo.sem2.lab2.constant.Direction
 
-import static ru.mirea.labs.trpo.sem2.lab2.constant.Directional.DOWN
-import static ru.mirea.labs.trpo.sem2.lab2.constant.Directional.UP
+import static Direction.DOWN
+import static Direction.UP
 
 class ElevatorCore {
     private ElevatorMovementNotifier elevatorMovementNotifier
     private int current
     private Queue<Integer> destinations
-    private Directional currentDirectional
+    private Direction currentDirection
 
     ElevatorCore(ElevatorMovementNotifier elevatorMovementNotifier, int initialLevel) {
         this.elevatorMovementNotifier = elevatorMovementNotifier
@@ -38,8 +38,8 @@ class ElevatorCore {
         exited
     }
 
-    Directional currentDirectional() {
-        currentDirectional
+    Direction currentDirection() {
+        currentDirection
     }
 
     boolean at(int level) {
@@ -51,7 +51,7 @@ class ElevatorCore {
     }
 
     private boolean moveUp(int to) {
-        currentDirectional = UP
+        currentDirection = UP
         def exited = false
         while (current != to) {
             current--
@@ -68,7 +68,7 @@ class ElevatorCore {
     }
 
     private boolean moveDown(int to) {
-        currentDirectional = DOWN
+        currentDirection = DOWN
         def exited = false
         while (current != to) {
             current++

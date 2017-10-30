@@ -1,10 +1,10 @@
 package ru.mirea.labs.trpo.sem2.lab2.constant
 
-enum Directional {
+enum Direction {
     UP,
     DOWN,
 
-    static directional(int src, int dest) {
+    static direction(int src, int dest) {
         dest > src ? DOWN : UP
     }
 }

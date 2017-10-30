@@ -5,7 +5,7 @@ import ru.mirea.labs.trpo.sem2.lab2.core.ElevatorMovementNotifier
 import ru.mirea.labs.trpo.sem2.lab2.model.InputInfo
 import ru.mirea.labs.trpo.sem2.lab2.model.OutputInfo
 
-import static ru.mirea.labs.trpo.sem2.lab2.constant.Directional.directional
+import static ru.mirea.labs.trpo.sem2.lab2.constant.Direction.direction
 import static ru.mirea.labs.trpo.sem2.lab2.constant.DoorsState.CLOSED
 import static ru.mirea.labs.trpo.sem2.lab2.constant.DoorsState.OPEN
 import static ru.mirea.labs.trpo.sem2.lab2.io.system.IoSystem.read
@@ -77,7 +77,7 @@ class ElevatorController {
         new LinkedList<InputInfo>(input).stream().filter { elevatorCore.at it.src }
                 .filter { it.src != it.dest }
                 .filter { it.time <= timeCounter }
-                .filter { elevatorCore.currentDirectional() == directional(it.src, it.dest) }
+                .filter { elevatorCore.currentDirection() == direction(it.src, it.dest) }
                 .filter { !elevatorCore.atDestinations(it.dest) }
                 .peek { elevatorCore.addDestination it.dest; input.remove it }
                 .count()
