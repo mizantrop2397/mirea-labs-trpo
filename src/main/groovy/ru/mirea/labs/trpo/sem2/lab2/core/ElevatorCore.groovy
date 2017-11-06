@@ -1,41 +1,54 @@
 package ru.mirea.labs.trpo.sem2.lab2.core
 
 import ru.mirea.labs.trpo.sem2.lab2.constant.Direction
+import ru.mirea.labs.trpo.sem2.lab2.constant.DoorsState
 
-import static Direction.DOWN
-import static Direction.UP
+import static java.util.Comparator.naturalOrder
+import static java.util.Comparator.reverseOrder
+import static ru.mirea.labs.trpo.sem2.lab2.constant.Direction.DOWN
+import static ru.mirea.labs.trpo.sem2.lab2.constant.Direction.UP
+import static ru.mirea.labs.trpo.sem2.lab2.constant.Direction.direction
+import static ru.mirea.labs.trpo.sem2.lab2.constant.DoorsState.CLOSED
+import static ru.mirea.labs.trpo.sem2.lab2.constant.DoorsState.OPEN
 
 class ElevatorCore {
     private ElevatorMovementNotifier elevatorMovementNotifier
     private int current
     private Queue<Integer> destinations
     private Direction currentDirection
+    private DoorsState doorsState
 
     ElevatorCore(ElevatorMovementNotifier elevatorMovementNotifier, int initialLevel) {
         this.elevatorMovementNotifier = elevatorMovementNotifier
         current = initialLevel
         destinations = new PriorityQueue<>()
-    }
-
-    void openDoors() {
-        elevatorMovementNotifier.doorsOpen current
-    }
-
-    void closeDoors() {
-        elevatorMovementNotifier.doorsClosed current
+        closeDoors()
     }
 
     void addDestination(int to) {
-        destinations << to
+        if (destinations.empty) destinations = new PriorityQueue<>(direction(current, to) == UP ? naturalOrder() : reverseOrder())
+        if (doorsState == CLOSED) openDoors()
+        if (!destinations.contains(to)) {
+            destinations << to
+        }
     }
 
-    boolean moveTo(int to) {
-        if (current == 0 || current == to) {
-            return false
+    void startMoving() {
+        if (destinations.empty) return
+        if (destinations.peek() == current) {
+            releasePassengers()
+            closeDoors()
+            return
         }
-        boolean exited
-        to > current ? (exited = moveDown(to)) : (exited = moveUp(to))
-        exited
+        moveToFirstDest()
+    }
+
+    void moveTo(int to) {
+        to > current ? moveUp(to) : moveDown(to)
+    }
+
+    boolean willBeEmptyNow() {
+        destinations.size() == 1 && destinations.peek() == current
     }
 
     Direction currentDirection() {
@@ -46,41 +59,51 @@ class ElevatorCore {
         current == level
     }
 
-    boolean atDestinations(int level) {
-        destinations.contains(level)
-    }
-
-    private boolean moveUp(int to) {
-        currentDirection = UP
-        def exited = false
-        while (current != to) {
-            current--
-            if (destinations.empty || destinations.peek() != current) {
-                elevatorMovementNotifier.levelChanged current + 1, current, false
-                exited = false
-                continue
-            }
-            elevatorMovementNotifier.levelChanged current + 1, current, true
-            exited = true
-            destinations.remove(current)
+    private void moveToFirstDest() {
+        while (!destinations.empty) {
+            if (doorsState == OPEN) closeDoors()
+            destinations.peek() > current ? moveUp(destinations.peek()) : moveDown(destinations.peek())
+            if (doorsState == OPEN && destinations.empty) closeDoors()
         }
-        exited
     }
 
-    private boolean moveDown(int to) {
+    private void releasePassengers() {
+        if (doorsState == CLOSED && !destinations.empty && destinations.peek() == current) openDoors()
+        destinations.removeAll { it == current }
+    }
+
+    private void openDoors() {
+        elevatorMovementNotifier.doorsOpen current
+        doorsState = OPEN
+    }
+
+    private void closeDoors() {
+        elevatorMovementNotifier.doorsClosed current
+        doorsState = CLOSED
+    }
+
+
+    private void moveDown(int to) {
         currentDirection = DOWN
-        def exited = false
         while (current != to) {
-            current++
-            if (destinations.empty || destinations.peek() != current) {
-                elevatorMovementNotifier.levelChanged current - 1, current, false
-                exited = false
-                continue
+            if (doorsState == OPEN) closeDoors()
+            current--
+            elevatorMovementNotifier.levelChanged current + 1, current
+            if (!destinations.empty) {
+                releasePassengers()
             }
-            exited = true
-            elevatorMovementNotifier.levelChanged current - 1, current, true
-            destinations.remove(current)
         }
-        exited
+    }
+
+    private void moveUp(int to) {
+        currentDirection = UP
+        while (current != to) {
+            if (doorsState == OPEN) closeDoors()
+            current++
+            elevatorMovementNotifier.levelChanged current - 1, current
+            if (!destinations.empty) {
+                releasePassengers()
+            }
+        }
     }
 }

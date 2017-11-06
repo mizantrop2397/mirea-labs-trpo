@@ -41,9 +41,7 @@ class Lab1 {
         def timeCreatedIndex = columnKeys.indexOf TIME_CREATED.name
         def timeIndex = columnKeys.indexOf TIME.name
         def timeModifiedIndex = columnKeys.indexOf TIME_MODIFIED.name
-        String.metaClass.toParameterDate = {
-            new SimpleDateFormat(PARAMETER_DATE_TIME_FORMAT).parse(delegate as String)
-        }
+        String.metaClass.toParameterDate = { new SimpleDateFormat(PARAMETER_DATE_TIME_FORMAT).parse(delegate as String) }
         Map<Parameter, ParameterInfo> parametersInfo = [:]
         rows.eachWithIndex { row, rowIndex ->
             parameters.each { parameter ->

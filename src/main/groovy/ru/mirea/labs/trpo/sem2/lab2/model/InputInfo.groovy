@@ -6,7 +6,7 @@ import groovy.transform.builder.Builder
 
 import static java.util.Comparator.*;
 
-@ToString
+@ToString(includePackage = false)
 @Builder
 @EqualsAndHashCode
 class InputInfo implements Comparable<InputInfo> {
